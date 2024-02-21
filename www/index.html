@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>IOStack.AI</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="title">ioStack.AI</h1>
+        <p class="tagline">
+            Deterministic, task-oriented virtual agents
+        </p>
+        <p class="description">
+            Sign up for launch notification.
+        </p>
+        <input type="text" id="email" class="email-input" placeholder="Enter your email">
+        <button class="submit-button" id="submitButton">Sign Up</button>
+    </div>
+
+    <div id="alert">
+        <div>
+            <p id="alert-message"></p>
+            <button id="alert-close">Close</button>
+        </div>
+    </div>
+    <script>
+
+        document.getElementById('submitButton').addEventListener('click', function (event) {
+            // Prevent the default form submission
+            event.preventDefault();
+
+            // Get the email from the input field
+            var email = document.getElementById('email').value;
+
+            // Validate the email
+            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                document.getElementById('alert-message').textContent = 'Please enter a valid email address.';
+                document.getElementById('alert').style.display = 'block';
+                return;
+            }
+
+            // Send the email to your server
+            fetch('/forwardemail', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email: email }),
+            })
+                .then(response => {
+                    document.getElementById('email').value = "";
+                    document.getElementById('alert-message').textContent = 'Thanks for signing up!';
+                    document.getElementById('alert').style.display = 'block';
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    document.getElementById('alert-message').textContent = "An error was encountered when submitting your email address: " + error;
+                    document.getElementById('alert').style.display = 'block';
+                });
+        });
+
+        document.getElementById('alert-close').addEventListener('click', function () {
+            document.getElementById('alert').style.display = 'none';
+        });
+    </script>
+</body>
+
+</html>
