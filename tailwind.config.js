@@ -23,7 +23,7 @@ module.exports = {
                 },
             },
             letterSpacing: {
-                custom: '0.1em', // Use your desired value
+                custom: '0.02em', // Use your desired value
             },
             height: {
                 200: '200px', // Default
