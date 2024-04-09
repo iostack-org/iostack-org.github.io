@@ -1,0 +1,24 @@
+{
+  "name": "iostack_site",
+  "version": "1.0.0",
+  "description": "",
+  "main": "tailwind.config.js",
+  "scripts": {
+    "build-css": "npx tailwindcss -i src/styles/input.css -o dist/styles/output.css",
+    "copy-assets": "cp -R src/assets/ dist/assets/",
+    "copy-favicon": "cp src/favicon.ico dist/",
+    "copy-cname": "cp src/CNAME dist/",
+    "copy-html": "cp src/*.html dist/",
+    "build": "mkdir -p dist && npm run copy-assets && npm run copy-html && npm run copy-favicon && npm run copy-cname && npm run build-css",
+    "watch": "npx tailwindcss -i src/styles/input.css -o dist/styles/output.css --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^10.4.19",
+    "flowbite": "^2.3.0",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.3"
+  }
+}
