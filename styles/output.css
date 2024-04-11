@@ -1428,10 +1428,6 @@ input:checked + .toggle-bg {
   border-radius: 0.25rem;
 }
 
-.rounded-3xl {
-  border-radius: 1.5rem;
-}
-
 .rounded-\[15px\] {
   border-radius: 15px;
 }
@@ -1724,7 +1720,7 @@ input:checked + .toggle-bg {
 }
 
 .tracking-custom {
-  letter-spacing: 0.1em;
+  letter-spacing: 0.02em;
 }
 
 .tracking-tight {
@@ -1734,11 +1730,6 @@ input:checked + .toggle-bg {
 .text-blue-600 {
   --tw-text-opacity: 1;
   color: rgb(28 100 242 / var(--tw-text-opacity));
-}
-
-.text-blue-700 {
-  --tw-text-opacity: 1;
-  color: rgb(26 86 219 / var(--tw-text-opacity));
 }
 
 .text-gray-500 {
