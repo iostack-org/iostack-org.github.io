@@ -55,6 +55,7 @@
             }
 
             function validateRegisterEmail(ev) {
+                console.log('validateRegisterEmail');
                 ev.preventDefault();
 
                 // Get the email from the input field
@@ -66,7 +67,12 @@
                     return;
                 }
 
-                grecaptcha.execute();
+                grecaptcha.ready(function() {
+                    grecaptcha.execute('6LcehrgpAAAAAF5B41yJw9d_dExZHvPlIgF2m_Ho', {action: 'submit'}).then(function(token) {
+                        // Add your logic to submit to your backend server here.
+                        onSubmitRegister(token);
+                    });
+               });
             }
             function onSubmitContactUs(token) {
                 console.log('onSubmitContactUs');
@@ -153,7 +159,12 @@
                     return;
                 }
 
-                grecaptcha.execute();
+                grecaptcha.ready(function() {
+                    grecaptcha.execute('6LcehrgpAAAAAF5B41yJw9d_dExZHvPlIgF2m_Ho', {action: 'submit'}).then(function(token) {
+                        // Add your logic to submit to your backend server here.
+                        onSubmitContactUs(token);
+                    });
+               });
             }
             function showFeedbackMessage(id, message) {
                 const feedbackMessage = document.getElementById(id);
@@ -182,6 +193,7 @@
                 // adjustHeroSectionHeight();
                 // window.onresize = adjustHeroSectionHeight;
 
+                // 6LcehrgpAAAAAF5B41yJw9d_dExZHvPlIgF2m_Ho
             }
         </script>
         <!-- Google tag (gtag.js) -->
@@ -201,6 +213,8 @@
                 y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
             })(window, document, "clarity", "script", "luq7cb9m15");
         </script>
+        <script src="https://www.google.com/recaptcha/api.js?render=6LcehrgpAAAAAF5B41yJw9d_dExZHvPlIgF2m_Ho"></script>
+        
     </head>
     
     <!-- <body class="dark h-screen flex flex-col"> -->
@@ -338,9 +352,8 @@
                                         required=""
                                     />
                                     <div
-                                        class="g-recaptcha"
+                                        id="captchaRegister"
                                         data-sitekey="6LdQ5H4pAAAAAFoCb--3pghJ1Pa1np8JlfyH5Wg4"
-                                        data-callback="onSubmitRegister"
                                         data-size="invisible"
                                     ></div>
                                 </div>
@@ -500,9 +513,8 @@
                             required
                         />
                         <div
-                            class="g-recaptcha"
+                            id="captchaContactUs"
                             data-sitekey="6LdQ5H4pAAAAAFoCb--3pghJ1Pa1np8JlfyH5Wg4"
-                            data-callback="onSubmitContactUs"
                             data-size="invisible"
                         ></div>
                     </div>
@@ -561,11 +573,7 @@
         </div>
     </section> -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
-        <script
-            src="https://www.google.com/recaptcha/api.js"
-            async
-            defer
-        ></script>
+        
         <script>
             onload();
         </script>
