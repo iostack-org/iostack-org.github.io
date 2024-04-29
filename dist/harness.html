@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chat Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600&display=swap" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>    
+    <script type="text/javascript" src="http://localhost:8000/v1/use_case/harness/sales_demo/bundle.js"></script>    
+    <style>
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Raleway', Arial, sans-serif;
+            background-color: #F5F5F5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column; /* Align children vertically */
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        #pageTitle {
+            text-align: center;
+            font-size: 24px;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        #contentContainer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column; /* Ensure vertical stacking */
+            width: 100%; /* Adjust width as necessary */
+        }
+
+        #mainContainer {
+            display: flex;
+            justify-content: space-between;
+            align-items: stretch;
+            width: 100%;
+            height: 90vh;
+            gap: 0.66%;
+        }
+
+        #displayContainer {
+            flex: 0 0 33%;
+            /* Adjusted for displayContainer */
+            /* max-width: 37%; */
+            /* New max-width to maintain proportions */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-y: auto;
+            /* padding: 10px; */
+            background-color: #FFFFFF;
+            border: 1px solid #f5f5f5;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+
+        #middleContainer {
+            flex: 0 0 31%;
+            /* Adjusted for displayContainer */
+            /* max-width: 30%; */
+            /* New max-width to maintain proportions */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /* overflow: hidden; */
+            overflow-y: auto;
+            /* padding: 10px; */
+            background-color: #FFFFFF;
+            border: 1px solid #f5f5f5;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+
+
+        #rightContainer {
+            flex: 0 0 34%;
+            /* Adjusted width for rightContainer */
+            display: flex;
+            flex-direction: column;
+            width: 30%;
+            /* New width to maintain proportions */
+            height: 100%;
+            overflow-y: auto;
+            /* padding: 10px; */
+            background-color: #FFFFFF;
+            border: 1px solid #f5f5f5;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+
+        .tiled-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+
+        .tiled-container > div {
+            flex: 0 0 calc(33.33% - 10px); /* Adjust as needed, 3 items per row */
+            margin: 5px;
+            /* display: flex; */
+            /* justify-content: center; */
+            /* align-items: center; */
+            /* Set specific dimensions for the container */
+            width: calc(33.33% - 10px); /* Adjust width as needed */
+            height: auto; /* Let the height adjust based on image aspect ratio */
+            max-height: 33%; /* Set a maximum height to maintain consistency */
+            overflow: hidden; /* Hide any overflow beyond the container */
+        }
+
+        .tiled-container > div img {
+            width: auto; /* Let the image adjust its width based on container */
+            height: 100%; /* Make the image take up the full height of its container */
+            object-fit: cover; /* Ensure the image is fully contained within its container */
+        }
+
+        #chatContainer {
+            flex: 1;
+            overflow-y: auto;
+            /* margin-left: 1%;
+            margin-right: 1%; */
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        #shoppingCartContainer {
+            flex: 0 0 30%;
+            display: flex;
+            flex-direction: column;           
+            overflow-y: auto; 
+            padding: 10px;
+            background-color: #f6f6f6;
+            width: 95%;
+            margin: 10px; /* Space between shopping cart and stats container */
+            border: 1px solid #f5f5f5;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+
+        #networkGraphContainer {
+            flex-grow: 1; /* Allow the shopping cart container to expand and fill available space */
+            overflow-y: auto; 
+            background-color: #FFFFFF;
+            width: 95%;
+            padding: 10px;
+            border: 1px solid #f5f5f5;
+        }
+
+        #descriptionPanel {
+            padding: 10px;
+            flex: 0 0 25%;
+            width: 95%;
+            background-color: #f6f6f6;
+            margin: 10px;
+            border: 1px solid #f5f5f5;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            overflow-y: auto;
+        }
+
+        .cartHeader {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 10px;
+            background-color: #f5f5f5;
+            color: #666;
+            font-size: 14px;
+            border-bottom: 1px solid #eaeaea;
+            margin-bottom: 10px;
+        }
+
+        .cartItemsContainer {
+            flex-grow: 1; /* Allow this container to expand within the shopping cart container */
+            overflow-y: auto; /* Scroll if content exceeds height */            
+            overflow-y: auto; /* Allows scrolling if many items are added */
+            max-height: 200px; /* Adjust based on your layout needs */
+            margin-bottom: 10px; /* Space between items and the total */
+        }
+
+        .headerItem, .cartItem span {
+            flex: 1;
+            text-align: left;
+            margin: 0 5px;
+        }
+
+        .cartItem {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+        }
+
+        .cartItem span {
+            margin: 0 5px; /* Add space around item details */
+        }
+
+        /* Make sure the first item of the header and cart item aligns left and others align right */
+        .headerItem:first-child, .cartItem span:first-child {
+            text-align: left;
+        }
+
+        .headerItem:not(:first-child), .cartItem span:not(:first-child) {
+            text-align: right;
+        }
+
+        .cartItemsContainer {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cartItem {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+        }
+
+        .cartTotal {
+            display: flex;
+            justify-content: flex-end;
+            padding-top: 10px;
+        }
+
+        .itemName {
+            flex-grow: 1; /* Allows item name to take up more space */
+        }
+
+        .itemQuantity, .itemPrice {
+            /* Adjust as needed for alignment and spacing */
+        }
+
+        /* Styling for titles and values */
+        #shoppingCartContainer h2 {
+            margin: 0 0 10px 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        #chainInputContainer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px;
+            border-top: 1px solid #ddd;
+        }
+
+        #messageInput {
+            flex-grow: 1;
+            border: 1px solid #f5f5f5;
+            border-radius: 3px;
+            padding: 10px;
+            margin-right: 10px;
+        }
+
+        #responseContainer {
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        #rightContainer {
+            display: flex;
+            flex-direction: column;
+            width: 40%;
+            /* Adjust width same as chatContainer */
+            height: 100%;
+        }
+
+        #statsContainer {
+            flex-direction: row;
+            background-color: #EAE9E9;
+            border: 1px solid #f5f5f5;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            padding: 10px;
+            margin-top: 7px;
+            margin-left: 1%;
+            margin-right: 1%;
+            margin-bottom: 7px;
+            /* height: 7%; */
+            width: 95%;
+            flex: 0 1 auto;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-shrink: 0; 
+        }
+
+        .statField {
+            flex: 1;
+            /* Each statField will take equal space */
+            margin: 0 10px;
+            /* Add some space around each statField */
+            text-align: center;
+            /* Center the text within the statField */
+            font-size: 14px;
+        }
+
+        .image {
+            max-width: 100%;
+            /* Make images take full width of the container */
+            height: auto;
+            /* Maintain aspect ratio */
+            margin-bottom: 10px;
+            /* border: 1px solid #ddd;
+            border-radius: 4px; */
+        }
+
+        .imageDescriptionContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .imageDescription {
+            margin-top: 5px;
+            text-align: center;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .message {
+            border-bottom: 1px solid #f5f5f5;
+            padding: 20px;
+        }
+
+        .userMessage {
+            color: #0056b3;
+        }
+
+        .serverMessage {
+            color: #333;
+        }
+
+        #scrollToBottomButton {
+            position: absolute;
+            bottom: 75px;
+            /* adjust according to the height of chainInputContainer */
+            left: 10px;
+            z-index: 99;
+            font-size: 18px;
+            border: none;
+            outline: none;
+            background-color: rgb(46, 180, 225);
+            /* Light Blue */
+            border: thin solid rgba(240, 248, 255);
+            /* Alice Blue */
+            color: white;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            line-height: 20px;
+            display: none;
+        }
+
+        #scrollToBottomButton:hover {
+            background-color: rgba(135, 206, 250);
+            /* Light Sky Blue */
+            border: thin solid rgba(240, 248, 255);
+            /* Alice Blue */
+        }
+
+        #sendButton {
+            background-color: #007bff;
+            border: none;
+            color: #ffffff;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #sendButton:hover {
+            background-color: #0056b3;
+        }
+
+        #sendButton:active {
+            background-color: #003680;
+        }
+
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* Adjust top margin to center vertically */
+            padding: 40px; /* Increased padding for larger size */
+            border: 1px solid #888;
+            width: 30%; /* Adjust width as per requirement */
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19); /* Optional: adds shadow for better aesthetics */
+            border-radius: 5px; /* Optional: rounds the corners */
+        }
+
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .loading::after {
+            display: inline-block;
+            animation: dotty steps(1, end) 1s infinite;
+            content: ' ';
+        }
+
+        @keyframes dotty {
+            0% {
+                content: '';
+            }
+
+            25% {
+                content: '.';
+            }
+
+            50% {
+                content: '..';
+            }
+
+            75% {
+                content: '...';
+            }
+
+            100% {
+                content: '';
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="pageTitle"></div>
+    <div id="contentContainer">    
+        <div id="mainContainer">
+            <div id="displayContainer" class="tiled-container"></div>
+            <div id="middleContainer">
+                <div id="shoppingCartContainer">
+                    <h3>Shopping Cart</h3>
+                    <div class="cartHeader">
+                        <span>Item Description</span>
+                        <span style="margin-left:20px;">Quantity</span>
+                        <span style="margin-left:20px;">Price</span>
+                    </div>
+                    <div class="cartItemsContainer">
+                        <!-- <div class="cartItem">
+                            <span class="itemName">Item Name 1</span>
+                            <span class="itemQuantity">Quantity: 1</span>
+                            <span class="itemPrice">$0.00</span>
+                        </div> -->
+                    </div>                
+                    <div class="cartTotal">
+                        <strong>Total: $0.00</strong>
+                    </div>
+                </div>
+                <div id="descriptionPanel">
+                    <h3>Details</h3>
+                </div>
+                <div id="networkGraphContainer">
+                </div>
+                <div id="statsContainer">
+                    <div class="statField">Cost: <span id="totalCost">$0</span>/<span id="runningTotalCost">$0</span></div>
+                    <div class="statField">Tokens: <span id="totalTokens">0</span>/<span id="runningTotalTokens">0</span>
+                    </div>
+                    <div class="statField">Prompt: <span id="promptTokens">0</span>/<span id="runningPromptTokens">0</span>
+                    </div>
+                    <div class="statField">Generated: <span id="generatedTokens">0</span>/<span
+                            id="runningGeneratedTokens">0</span></div>
+                </div>
+            </div>
+            <div id="rightContainer"> <!-- New container to hold chat and stats -->
+                <div id="chatContainer">
+                    <div id="responseContainer"></div>
+                    <div id="chainInputContainer">
+                        <input type="text" id="messageInput" placeholder="Type your message">
+                        <button id="sendButton">Send</button>
+                    </div>
+                    <button id="scrollToBottomButton" title="Scroll to bottom">&#8595;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Checkout Complete</h2>
+            <p>Your cart has been successfully processed!</p>
+            <button id="closeModal">Close</button>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            window.sales_client.start();
+        });
+    </script>
+</body>
+
+</html>
