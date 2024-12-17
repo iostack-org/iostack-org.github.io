@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ioStack.ai</title>
+    <link rel="icon" href="/favicon.ico?v=2" sizes="any" />
+    <link href="./styles/output.css" rel="stylesheet" />
+    <script>
+
+        function onSubmitRegister(token) {
+            var email = document.getElementById('NotifyEmail').value;
+
+            let post_url = 'https://platform.iostack.ai/register_email';
+            fetch(post_url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email,
+                    recaptcha_token: token,
+                }),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        document.getElementById('NotifyEmail').value = '';
+                        showFeedbackMessage(
+                            'Success',
+                            "Thanks for registering - you'll hear from us soon!"
+                        );
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showFeedbackMessage(
+                        'Error',
+                        `An error was encountered when submitting your email address: ${error}`
+                    );
+                });
+        }
+
+        function validateRegisterEmail(ev) {
+            ev.preventDefault();
+
+            var email = document.getElementById('NotifyEmail').value;
+
+            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showFeedbackMessage('Error', 'Please enter a valid email address.')
+                return;
+            }
+
+            grecaptcha.ready(function () {
+                grecaptcha.execute('6LcB7L8pAAAAAECzVoutilZXU3C9Y7FbWhRTiBJh', { action: 'submit' }).then(function (token) {
+                    onSubmitRegister(token);
+                });
+            });
+        }
+        function onSubmitContactUs(token) {
+            var email = document.getElementById('ContactEmail').value;
+            var subject = document.getElementById('ContactSubject').value;
+            var message = document.getElementById('ContactMessage').value;
+
+            let post_url = 'https://platform.iostack.ai/contact_us';
+            fetch(post_url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email,
+                    subject: subject,
+                    message: message,
+                    recaptcha_token: token,
+                }),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        document.getElementById('ContactEmail').value = '';
+                        document.getElementById('ContactSubject').value =
+                            '';
+                        document.getElementById('ContactMessage').value =
+                            '';
+                        showFeedbackMessage(
+                            'Success',
+                            "Thanks for getting in touch - you'll hear from us soon!"
+                        );
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showFeedbackMessage(
+                        'Error',
+                        `An error was encountered when submitting your form: ${error}`
+                    );
+                });
+        }
+        function validateContactUsForm(ev) {
+            ev.preventDefault();
+
+            const email = document.getElementById('ContactEmail').value;
+            const subject = document
+                .getElementById('ContactSubject')
+                .value.trim();
+            const message = document
+                .getElementById('ContactMessage')
+                .value.trim();
+
+            if (subject === '') {
+                showFeedbackMessage(
+                    'Error',
+                    'Subject cannot be empty'
+                );
+                return;
+            }
+
+            if (message === '') {
+                showFeedbackMessage(
+                    'Error',
+                    'Message cannot be empty'
+                );
+                return;
+            }
+
+            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showFeedbackMessage(
+                    'Error',
+                    'Please enter a valid email address.'
+                );
+                return;
+            }
+
+            grecaptcha.ready(function () {
+                grecaptcha.execute('6LcB7L8pAAAAAECzVoutilZXU3C9Y7FbWhRTiBJh', { action: 'submit' }).then(function (token) {
+                    onSubmitContactUs(token);
+                });
+            });
+        }
+        function showFeedbackMessage(title, message) {
+            const modalEl = document.getElementById('info-popup');
+            const modalTitle = document.getElementById("info-popup-title")
+            const modalContents = document.getElementById("info-popup-message")
+
+            modalTitle.innerText = title
+            modalContents.innerText = message
+
+            const feedbackModal = new Modal(modalEl, {
+                placement: 'center'
+            });
+
+            feedbackModal.show();
+
+            const closeModalEl = document.getElementById('close-modal');
+            closeModalEl.addEventListener('click', function () {
+                feedbackModal.hide();
+            });
+            // const feedbackMessage = document.getElementById(id);
+            // feedbackMessage.textContent = message;
+            // feedbackMessage.style.display = 'block';
+            // setTimeout(() => {
+            //     feedbackMessage.style.display = 'none';
+            // }, 5000);
+        }
+        function adjustHeroSectionHeight() {
+            const header = document.getElementById('site-header');
+            const heroSection = document.getElementById('Hero');
+            if (header && heroSection) {
+                const headerHeight = header.offsetHeight;
+                const viewportHeight = window.innerHeight;
+                const heroSectionHeight = viewportHeight - headerHeight;
+                heroSection.style.height = `${heroSectionHeight}px`;
+                // console.log(`headerHeight: ${headerHeight}, viewportHeight: ${viewportHeight}, heroSectionHeight: ${heroSectionHeight}`);
+            }
+        }
+        function onload() {
+            document.getElementById('RegisterButton').onclick =
+                validateRegisterEmail;
+            document.getElementById('ContactUsButton').onclick =
+                validateContactUsForm;
+            // adjustHeroSectionHeight();
+            // window.onresize = adjustHeroSectionHeight;
+        }
+    </script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-31PJ8ZG0S5"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-31PJ8ZG0S5');
+    </script>
+
+    <script src="https://www.google.com/recaptcha/api.js?render=6LcB7L8pAAAAAECzVoutilZXU3C9Y7FbWhRTiBJh"></script>
+
+</head>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XQWNX620YY"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-XQWNX620YY');
+</script>
+
+<!-- <body class="dark h-screen flex flex-col"> -->
+
+<body class="dark">
+    <header id="site-header">
+        <nav class="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
+            <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
+                <!-- <div class="flex items-center">
+                    <div class="flex items-center">
+                        <img src="./assets/images/logo-reversed.png" class="size-8"/>
+                    </div>
+                    <a href="#" class="flex items-center mb-3 ml-4">
+                        <span class="self-center text-4xl font-semibold text-white dark:text-[#93C5FD] whitespace-nowrap  tracking-custom">iostack</span>
+                    </a>
+                </div> -->
+                <div class="mb-6 md:mb-0">
+                    <a href="https://iostack.ai" class="flex items-center">
+                        <img src="./assets/images/logo-reversed.png" class="mt-3 mr-3 h-8" alt="iostack.ai Logo" />
+                        <span
+                            class="self-center text-4xl font-semibold whitespace-nowrap dark:text-white">iostack.ai</span>
+                    </a>
+                </div>
+                <div class="flex items-center lg:order-2">
+                    <a href="#" class="hidden"></a>
+                    <button data-collapse-toggle="mobile-menu-2" type="button"
+                        class="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                        aria-controls="mobile-menu-2" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="https://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                        <svg class="hidden w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="https://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1" id="mobile-menu-2">
+                    <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
+                        <li>
+                            <a href="#Hero"
+                                class="block py-2 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-white"
+                                aria-current="page">Solution</a>
+                        </li>
+                        <li>
+                            <a href="#Benefits"
+                                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">Benefits</a>
+                        </li>
+                        <li>
+                            <a href="#ContactUs"
+                                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">Contact
+                                Us</a>
+                        </li>
+                        <li>
+                            <a href="./privacy.html"
+                                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">Privacy</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section id="Hero" class="flex-grow bg-white dark:bg-gray-900">
+        <div class="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
+            <div class="mr-auto place-self-center lg:col-span-7 h-90">
+                <h1
+                    class="max-w-2xl mb-4 text-3xl font-semibold tracking-tight leading-none md:text-4xl xl:text-5xl dark:text-white">
+                    The first chatbot platform built with GenAI at its core.
+                </h1>
+                <p class="max-w-2xl font-light text-gray-500 md:text-lg mb-2 lg:text-xl dark:text-gray-400">
+                    A purpose-built platform designed from the outset to leverage the intelligence of
+                    Generative AI in service of your use case.
+                </p>
+                <p class="max-w-2xl mb-6 font-light text-gray-500 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-400">
+                    You can finally tap your creativity to deliver truly engaging chatbot experiences:
+                    responding, navigating and extracting data coherently.
+                </p>
+                <p class="text-gray-500 dark:text-gray-400">
+                    Register your email to be notified when we're ready to
+                    launch.
+                </p>
+                <div class="mt-5 space-y-4 sm:flex sm:space-y-0 sm:space-x-4">
+                    <form action="#">
+                        <div class="items-center mx-auto mb-3 space-y-4 max-w-screen-sm sm:flex sm:space-y-0">
+                            <div class="relative w-full">
+                                <label for="email"
+                                    class="hidden mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Email
+                                    address</label>
+                                <input id="NotifyEmail"
+                                    class="block p-3 pl-10 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 sm:rounded-none sm:rounded-l-lg focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    placeholder="Enter your email" type="email" id="email" required="" />
+                                <div id="captchaRegister" data-sitekey="6LdQ5H4pAAAAAFoCb--3pghJ1Pa1np8JlfyH5Wg4"
+                                    data-size="invisible"></div>
+                            </div>
+                            <div>
+                                <button id="RegisterButton" type="submit"
+                                    class="py-3 px-5 w-full text-sm font-medium text-center text-white rounded-lg border cursor-pointer bg-primary-700 border-primary-600 sm:rounded-none sm:rounded-r-lg hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                                    Register
+                                </button>
+                            </div>
+                        </div>
+                        <div
+                            class="mx-auto max-w-screen-sm text-sm text-left text-gray-500 newsletter-form-footer dark:text-gray-300">
+                            We care about the protection of your data.
+                            <a href="./privacy.html"
+                                class="font-medium text-primary-600 dark:text-primary-500 hover:underline">Read our
+                                Privacy Policy</a>.
+                        </div>
+                    </form>
+                </div>
+                <!-- <p id="RegisterFeedback" style="display: none" class="text-gray-500 dark:text-white">
+                    Thanks for signing up - you'll hear from us soon.
+                </p> -->
+            </div>
+            <div class="hidden lg:mt-0 lg:col-span-5 lg:flex">
+                <!-- <img src="./assets/images/hero_phone.jpeg" alt="placeholder" style="height: 360px"
+                    class="w-auto object-contain rounded-lg" /> -->
+            </div>
+        </div>
+    </section>
+
+    <section id="Benefits" class="bg-white dark:bg-gray-900">
+        <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+            <div class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0">
+                <div
+                    class="flex flex-col items-center justify-start p-6 bg-gray-700 text-white shadow-md border-2 border-slate-600 w-full md:h-[225px] border-slate400 rounded-[15px] mb-5">
+                    <h2 class="mb-2 text-2xl font-bold dark:text-white">
+                        Intuitive
+                    </h2>
+                    <p class="font-light md:text-lg lg:text-xl text-gray-500 dark:text-gray-400">
+                        We make the authoring of LLM-backed agents easy - rapidly build engaging experiences
+                        using plain language and natural conversation structures.
+                    </p>
+                </div>
+                <div
+                    class="flex flex-col items-center justify-start p-6 bg-gray-700 text-white shadow-md border-2 border-slate-600 w-full md:h-[225px] border-slate400 rounded-[15px] mb-5">
+                    <h2 class="mb-2 text-2xl font-bold dark:text-white">
+                        Streamlined
+                    </h2>
+                    <p class="font-light md:text-lg lg:text-xl text-gray-500 dark:text-gray-400">
+                        Say goodbye to spaghetti logic, turn-by-turn authoring, intent training and complex error
+                        handling. Focus on content, personality and user experience.
+                    </p>
+                </div>
+                <div
+                    class="flex flex-col items-center justify-start p-6 bg-gray-700 text-white shadow-md border-2 border-slate-600 w-full md:h-[225px] border-slate400 rounded-[15px] mb-5">
+                    <h2 class="mb-2 text-2xl font-bold dark:text-white">
+                        Self Directed
+                    </h2>
+                    <p class="font-light md:text-lg lg:text-xl text-gray-500 dark:text-gray-400">
+                        Express your use cases using relatable and easily understood structures. Allow the LLM
+                        to navigate them intelligently and naturally.
+                    </p>
+                </div>
+                <div
+                    class="flex flex-col items-center justify-start p-6 bg-gray-700 text-white shadow-md border-2 border-slate-600 w-full md:h-[225px] border-slate400 rounded-[15px] mb-5">
+                    <h2 class="mb-2 text-2xl font-bold dark:text-white">
+                        Controllable
+                    </h2>
+                    <p class="font-light md:text-lg lg:text-xl text-gray-500 dark:text-gray-400">
+                        Direct and guide the LLM through complex, scalable processes toward controllable outcomes.
+                        Retain control of content and character at every step.
+                    </p>
+                </div>
+                <div
+                    class="flex flex-col items-center justify-start p-6 bg-gray-700 text-white shadow-md border-2 border-slate-600 w-full md:h-[225px] border-slate400 rounded-[15px] mb-5">
+                    <h2 class="mb-2 text-2xl font-bold dark:text-white">
+                        Flexible
+                    </h2>
+                    <p class="font-light md:text-lg lg:text-xl text-gray-500 dark:text-gray-400">
+                        Built-in intelligent fallback, failover and naturalistic responses result in fluent error
+                        handling, simplified authoring and robust interactions.
+                    </p>
+                </div>
+                <div
+                    class="flex flex-col items-center justify-start p-6 bg-gray-700 text-white shadow-md border-2 border-slate-600 w-full md:h-[225px] border-slate400 rounded-[15px] mb-5">
+                    <h2 class="mb-2 text-2xl font-bold dark:text-white">
+                        Versatile
+                    </h2>
+                    <p class="font-light md:text-lg lg:text-xl text-gray-500 dark:text-gray-400">
+                        Extend the horizon to arbitrarily complex conversations. Use any combination of fine-grained
+                        turns, topics or wider discussions.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="ContactUs" class="bg-white dark:bg-gray-900">
+        <div class="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
+            <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900 dark:text-white">
+                Contact Us
+            </h2>
+            <p class="mb-8 lg:mb-16 font-light text-center text-gray-500 dark:text-gray-400 sm:text-xl">
+                We'd love to hear from you. Curious about what we're doing
+                or want to participate in a beta? Let us know.
+            </p>
+            <form action="#" class="space-y-8">
+                <div>
+                    <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Your
+                        email</label>
+                    <input type="email" id="ContactEmail"
+                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light"
+                        placeholder="" required />
+                    <div id="captchaContactUs" data-sitekey="6LdQ5H4pAAAAAFoCb--3pghJ1Pa1np8JlfyH5Wg4"
+                        data-size="invisible"></div>
+                </div>
+                <div>
+                    <label for="subject"
+                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Subject</label>
+                    <input type="text" id="ContactSubject"
+                        class="block p-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light"
+                        placeholder="Let us know how we can help you" required />
+                </div>
+                <div class="sm:col-span-2">
+                    <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Your
+                        message</label>
+                    <textarea id="ContactMessage" rows="6"
+                        class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg shadow-sm border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                        placeholder="Leave a comment..."></textarea>
+                </div>
+                <button id="ContactUsButton" type="submit"
+                    class="py-3 px-5 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 w-full sm:w-auto">
+                    Send message
+                </button>
+
+            </form>
+        </div>
+    </section>
+
+    <footer class="p-4 bg-white sm:p-6 dark:bg-gray-800">
+        <div class="mx-auto max-w-screen-xl">
+            <div class="md:flex md:justify-between">
+                <div class="mb-6 md:mb-0">
+                </div>
+                <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
+                    <div>
+                        <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Legal</h2>
+                        <ul class="text-gray-600 dark:text-gray-400">
+                            <li class="mb-4">
+                                <a href="./privacy.html" class="hover:underline">Privacy
+                                    Policy</a>
+                            </li>
+                            <li>
+                                <a href="./tos.html" class="hover:underline">Terms &amp; Conditions</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
+            <div class="sm:flex sm:items-center sm:justify-between">
+                <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2024 <a
+                        href="https://iostack.ai" class="hover:underline">iostack.ai</a>. All Rights Reserved.
+                </span>
+                <div class="flex mt-4 space-x-6 sm:justify-center sm:mt-0">
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div id="info-popup" tabindex="-1"
+        class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
+        <div class="relative p-4 w-full max-w-lg h-full md:h-auto">
+            <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 md:p-8">
+                <div class="mb-4 text-sm font-light text-gray-500 dark:text-gray-400">
+                    <h3 id="info-popup-title" class="mb-3 text-2xl font-bold text-gray-900 dark:text-white">Info</h3>
+                    <p id="info-popup-message">
+                        Thanks for your query. We'll be in touch shortly!
+                    </p>
+                </div>
+                <div class="justify-between items-center pt-0 space-y-4 sm:flex sm:space-y-0">
+                    <div class="items-center space-y-4 sm:space-x-4 sm:flex sm:space-y-0">
+                        <button id="close-modal" type="button"
+                            class="py-2 px-4 w-full text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 sm:w-auto hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+
+    <script>
+        onload();
+    </script>
+
+    <div id="iostack-frame"></div>
+
+    
+
+    <script>
+        function _load_chat() {
+            window.iostack.chat.load({
+                url: 'http://localhost:8000',
+                access_key: 'iosk-ucst-prd-6ZqJaCj5vBuqBvTJsZUvLww8tRVCk4vUTwVPF26tjezu6EdU8HZIHKzqnhlLxbuxb3UkjmEZeCkbneTXj1jIztu1aMA4lPfyggY7pSsVDIq8BLA0Jz7hCVZ1loQDQO7iCPfQJq5irESN0U6Y43R2THTAEM1v',
+                assistant: {
+                    title: 'iostack Agent',
+                    description: 'Here to help!',
+                    poweredBy: true,
+                    position: 'left'
+                }
+            });
+        }
+    </script>
+    <script type="text/javascript" src="https://cdn.iostack.ai/widget/bundle.mjs" onload="_load_chat()"></script>
+
+</body>
+
+</html>
