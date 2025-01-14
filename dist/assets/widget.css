@@ -1,0 +1,7 @@
+.iochat-launcher {
+    background-color: rgb(17, 58, 169);
+}
+
+.iochat-launcher:hover {
+    background-color: rgb(29 78 216); /* Background color on hover */
+}
