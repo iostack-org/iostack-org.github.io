@@ -16,7 +16,7 @@
             width: 70px !important;
             overflow: hidden !important;
             transition: all 0.3s ease !important;
-            left: 4px !important;
+            left: 20px !important;
             bottom: 30px !important;
         }
 
@@ -244,7 +244,7 @@
     </header>
 
     <section id="Hero" class="flex-grow bg-white dark:bg-gray-900">
-        <div class="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-8 lg:pb-0 lg:grid-cols-12">
+        <div class="grid max-w-screen-xl px-6 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-8 lg:pb-0 lg:grid-cols-12">
             <div class="mr-auto place-self-center lg:col-span-4 h-90">
                 <h1
                     class="max-w-2xl mb-4 text-3xl font-semibold tracking-tight leading-none md:text-4xl xl:text-5xl dark:text-white">
@@ -259,14 +259,14 @@
                     responding, navigating and extracting data coherently.
                 </p>
                 <p class="text-gray-500 dark:text-gray-400">
-                    Try it out the Beta for free with your own OpenAI API key.
+                    Try out the Beta for free with your own OpenAI API key.
                 </p>
                 <div class="mt-5 space-y-4 sm:flex sm:space-y-0 sm:space-x-4">
                     <form action="#">
                         <div class="items-center mx-auto mb-3 space-y-4 max-w-screen-sm sm:flex sm:space-y-0">
                             <div class="mt-4">
                                 <button type="submit" onclick="window.open('https://portal.iostack.ai', '_blank');"
-                                    class="py-2 px-8 w-full text-sm font-medium text-center text-white rounded-lg border cursor-pointer bg-primary-700 border-primary-600 sm:rounded-lg hover:bg-primary-800 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700">
+                                    class="pt-2 pb-3 px-8 w-full text-sm font-medium text-center text-white rounded-lg border cursor-pointer bg-primary-700 border-primary-600 sm:rounded-lg hover:bg-primary-800 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700">
                                     Get started for free &nbsp; &#8594;
                                 </button>
                             </div>
@@ -291,7 +291,7 @@
                     <h2 class="mb-2 text-2xl font-bold dark:text-white">
                         Intuitive
                     </h2>
-                    <p class="font-light md:text-lg lg:text-xl text-gray-500 dark:text-gray-400">
+                    <p class="font-light md:text-lg lg:text-lg text-gray-500 dark:text-gray-400">
                         We make the authoring of LLM-backed agents easy - rapidly build engaging experiences
                         using plain language and natural conversation structures.
                     </p>
@@ -301,7 +301,7 @@
                     <h2 class="mb-2 text-2xl font-bold dark:text-white">
                         Streamlined
                     </h2>
-                    <p class="font-light md:text-lg lg:text-xl text-gray-500 dark:text-gray-400">
+                    <p class="font-light md:text-lg lg:text-lg text-gray-500 dark:text-gray-400">
                         Say goodbye to spaghetti logic, turn-by-turn authoring, intent training and complex error
                         handling. Focus on content, personality and user experience.
                     </p>
@@ -311,7 +311,7 @@
                     <h2 class="mb-2 text-2xl font-bold dark:text-white">
                         Self Directed
                     </h2>
-                    <p class="font-light md:text-lg lg:text-xl text-gray-500 dark:text-gray-400">
+                    <p class="font-light md:text-lg lg:text-lg text-gray-500 dark:text-gray-400">
                         Express your use cases using relatable and easily understood structures. Allow the LLM
                         to navigate them intelligently and naturally.
                     </p>
@@ -321,7 +321,7 @@
                     <h2 class="mb-2 text-2xl font-bold dark:text-white">
                         Controllable
                     </h2>
-                    <p class="font-light md:text-lg lg:text-xl text-gray-500 dark:text-gray-400">
+                    <p class="font-light md:text-lg lg:text-lg text-gray-500 dark:text-gray-400">
                         Direct and guide the LLM through complex, scalable processes toward controllable outcomes.
                         Retain control of content and character at every step.
                     </p>
@@ -331,7 +331,7 @@
                     <h2 class="mb-2 text-2xl font-bold dark:text-white">
                         Flexible
                     </h2>
-                    <p class="font-light md:text-lg lg:text-xl text-gray-500 dark:text-gray-400">
+                    <p class="font-light md:text-lg lg:text-lg text-gray-500 dark:text-gray-400">
                         Built-in intelligent fallback, failover and naturalistic responses result in fluent error
                         handling, simplified authoring and robust interactions.
                     </p>
@@ -341,7 +341,7 @@
                     <h2 class="mb-2 text-2xl font-bold dark:text-white">
                         Versatile
                     </h2>
-                    <p class="font-light md:text-lg lg:text-xl text-gray-500 dark:text-gray-400">
+                    <p class="font-light md:text-lg lg:text-lg text-gray-500 dark:text-gray-400">
                         Extend the horizon to arbitrarily complex conversations. Use any combination of fine-grained
                         turns, topics or wider discussions.
                     </p>
@@ -412,7 +412,7 @@
             </div>
             <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
             <div class="sm:flex sm:items-center sm:justify-between">
-                <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2024 <a
+                <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2025 <a
                         href="https://iostack.ai" class="hover:underline">iostack.ai</a>. All Rights Reserved.
                 </span>
                 <div class="flex mt-4 space-x-6 sm:justify-center sm:mt-0">
@@ -446,22 +446,6 @@
     <script>
         onload();
     </script>
-
-    <div id="iostack-frame"></div>
-    <script>
-        function _load_chat() {
-            window.iostack.chat.load({
-                url: 'https://platform.iostack.ai',
-                access_key: 'iosk-ucst-prd-7F8z5NPclhgl06Pb8ebEvJhxAaQkrSxXxeIuOwRf3WZH8tDOMV6Kwsnis8TAfAPOTjMFojEQUK73UN7jKwwUrDwnHbVxQgFdLEj6Fccn0TXptmbcx3xubFNrZkopaEhtLx1MTSd43DuOibqn4tRUKrcpTRDv',
-                assistant: {
-                    title: 'Agent',
-                    avatar: 'https://cdn.iostack.ai/widget/avatar_sm.png',
-                    image: 'https://cdn.iostack.ai/widget/logo_border_sm.png'
-                }
-            });
-        }
-    </script>
-    <script type="text/javascript" src="https://cdn.iostack.ai/widget/bundle.mjs" onload="_load_chat()"></script>
 </body>
 
 </html>
